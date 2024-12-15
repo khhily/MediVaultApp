@@ -1,0 +1,4 @@
+enum MedicationStockOperation {
+  increment,
+  decrement
+}
