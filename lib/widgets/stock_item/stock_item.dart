@@ -5,11 +5,13 @@ import 'package:medi_vault/utils/number_utils.dart';
 
 class MedicationStockListItem extends StatelessWidget {
   final MedicationStock item;
+  final int index;
   final void Function()? onTap;
 
   const MedicationStockListItem({
     super.key,
     required this.item,
+    required this.index,
     this.onTap,
   });
 

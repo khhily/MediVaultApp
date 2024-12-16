@@ -27,7 +27,7 @@ class MedicationStockAccess extends GetxService {
       _tableName,
       where: whereSql,
       whereArgs: args,
-      orderBy: "MedicationName ASC",
+      orderBy: "UpdateTime DESC",
       limit: pageSize,
       offset: (page - 1) * pageSize,
     );
@@ -63,7 +63,10 @@ class MedicationStockAccess extends GetxService {
 
   Future insertOrUpdate(MedicationStock stock) async {
     await sqliteService.db.transaction((trans) async {
-      final old = await trans.query(_tableName, limit: 1, where: 'MedicationName = ?', whereArgs: [stock.medicationName]);
+      final old = await trans.query(_tableName,
+          limit: 1,
+          where: 'MedicationName = ?',
+          whereArgs: [stock.medicationName]);
       if (old.isNotEmpty) {
         await trans.update(_tableName, stock.toJson());
       } else {
@@ -92,12 +95,37 @@ class MedicationStockAccess extends GetxService {
     );
   }
 
-
   Future batchInsertOrUpdate(List<MedicationStock> data) async {
     final Batch batch = sqliteService.db.batch();
 
     for (final item in data) {
-      batch.insert(_tableName, item.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
+      batch.insert(_tableName, item.toJson(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+
+    await batch.commit(noResult: true);
+  }
+
+  Future patchUpdateByRecords(List<MedicationStockRecord> records) async {
+    final batch = sqliteService.db.batch();
+
+    for (final record in records) {
+      if (record.operation == MedicationStockOperation.increment) {
+        batch.rawUpdate(
+          'update $_tableName set StockQuantity = StockQuantity + ?, AveragePrice = ((StockQuantity * AveragePrice + ?) / (StockQuantity + ?)) where MedicationName = ?',
+          [
+            record.quantity,
+            record.totalPrice,
+            record.quantity,
+            record.medicationName
+          ],
+        );
+      } else {
+        batch.rawUpdate(
+          'update $_tableName set StockQuantity = StockQuantity + ? where MedicationName = ?',
+          [record.quantity, record.medicationName],
+        );
+      }
     }
 
     await batch.commit(noResult: true);

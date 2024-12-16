@@ -16,14 +16,12 @@ class SqliteService extends GetxService {
     final fileName = userId == null ? 'default.db' : '$userId.db';
     String path = join(databasePath, fileName);
 
-    await deleteDatabase(path);
+    // await deleteDatabase(path);
 
     _db = await openDatabase(path, version: 1, onCreate: (db, i) async {
       await db.execute(medicationStockTableCreateSql);
       await db.execute(medicationStockRecordsTableCreateSql);
     });
-    
-    var tables = await _db!.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';");
 
     return this;
   }

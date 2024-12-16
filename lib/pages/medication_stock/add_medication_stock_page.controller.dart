@@ -75,12 +75,15 @@ class AddMedicationStockPageController extends GetxController {
       final record = MedicationStockRecord(
         medicationName: name.value,
         quantity: count,
-        unitPrice: !isDecrement ? totalPrice.value! / this.count.value! : null,
-        totalPrice: !isDecrement ? totalPrice.value : null,
         entryDate: DateTime.now().toUtc(),
         id: 0,
         operation: operationType.value,
       );
+
+      if (!isDecrement) {
+        record.unitPrice = totalPrice.value! / this.count.value!;
+        record.totalPrice = totalPrice.value;
+      }
 
       await msrAccess.insert(record);
 

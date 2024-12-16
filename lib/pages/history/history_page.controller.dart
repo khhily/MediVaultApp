@@ -33,6 +33,7 @@ class HistoryPageController extends GetxController {
           resetFooterState: listService.hasMore.value);
     } catch (e) {
       refreshController.refreshFailed();
+      rethrow;
     }
   }
 
@@ -48,6 +49,7 @@ class HistoryPageController extends GetxController {
       }
     } catch (e) {
       refreshController.loadFailed();
+      rethrow;
     }
   }
 }

@@ -14,7 +14,7 @@ CREATE TABLE Patients (
 const medicationStockTableCreateSql = '''
 CREATE TABLE MedicationStock (
     MedicationName TEXT PRIMARY KEY,
-    StockQuantity REAL NOT NULL CHECK (StockQuantity >= 0),
+    StockQuantity REAL NOT NULL,
     Unit TEXT NOT NULL, -- 如“片”、“瓶”等
     AveragePrice REAL NOT NULL CHECK (AveragePrice >= 0), -- 药品均价
     UpdateTime DATE NOT NULL DEFAULT CURRENT_DATE
@@ -31,6 +31,7 @@ CREATE TABLE MedicationStockRecord (
     TotalPrice REAL, -- 计算字段，记录总金额
     EntryDate DATE NOT NULL DEFAULT CURRENT_DATE, -- 入库日期
     Operation INTEGER NOT NULL, -- 操作类型
+    Synced BOOLEAN NOT NULL DEFAULT 0, -- 是否已经同步
     FOREIGN KEY (MedicationName) REFERENCES MedicationStock(MedicationName)
 );
 ''';

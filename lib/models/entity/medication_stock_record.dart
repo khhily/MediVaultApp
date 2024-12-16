@@ -10,11 +10,13 @@ class MedicationStockRecord {
 
   final double quantity;
 
-  final double? unitPrice;
+  double? unitPrice;
 
-  final double? totalPrice;
+  double? totalPrice;
 
   final DateTime entryDate;
+
+  bool synced;
 
   MedicationStockRecord({
     required this.id,
@@ -24,6 +26,7 @@ class MedicationStockRecord {
     this.totalPrice,
     required this.entryDate,
     required this.operation,
+    this.synced = false,
   });
 
   factory MedicationStockRecord.fromJson(Map<String, Object?> map) {
@@ -39,6 +42,7 @@ class MedicationStockRecord {
       ).toLocal(),
       operation: indexToEnum(
           MedicationStockOperation.values, map['Operation'] as int)!,
+      synced: map['Synced'] == 0 ? false : true,
     );
   }
 
@@ -51,6 +55,7 @@ class MedicationStockRecord {
       "TotalPrice": totalPrice,
       "EntryDate": entryDate.millisecondsSinceEpoch,
       'Operation': operation.index,
+      "Synced": synced ? 1 : 0,
     };
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:medi_vault/core/global_colors.dart';
 import 'package:medi_vault/routes.dart';
 import 'package:medi_vault/services/service_init.dart';
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       title: '库存记录',
       themeMode: ThemeMode.light,
       theme: ThemeData.from(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: GlobalColors.primaryColor),
       ),
     );
   }

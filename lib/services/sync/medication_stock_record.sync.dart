@@ -11,13 +11,13 @@ class _MedicationStockRecordSyncService implements _SyncBase {
   @override
   Future _deleteSynced(List<Object> ids) async {
     final idList = ids.map<int>((id) => (id as num).toInt()).toList();
-    await recordAccessor.deleteAll(idList);
+    await recordAccessor.updateSynced(idList, true);
   }
 
   @override
   Future<List<Map<String, Object?>>> _getList(
       {required int page, int pageSize = 20}) async {
-    final list = await recordAccessor.getList(page: page, pageSize: pageSize);
+    final list = await recordAccessor.getList(page: page, pageSize: pageSize, synced: false);
     return list.map<Map<String, Object?>>((item) => item.toJson()).toList();
   }
 
@@ -32,6 +32,12 @@ class _MedicationStockRecordSyncService implements _SyncBase {
     if (data == null) return;
 
     await msAccess.batchInsertOrUpdate(data);
+
+    final records = await recordAccessor.getAllList(synced: false);
+
+    if (records.isNotEmpty) {
+      await msAccess.patchUpdateByRecords(records);
+    }
   }
 
   @override

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:hive/hive.dart';
 import 'package:medi_vault/services/hive_cache.service.dart';
 
 class DataCacheService {

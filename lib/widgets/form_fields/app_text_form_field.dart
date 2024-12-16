@@ -54,10 +54,17 @@ class AppTextFormField<T> extends FormField<T> {
               minLines: minLines,
               maxLines: maxLines,
               inputFormatters: inputFormatters,
-              decoration: (decoration ?? InputDecoration())
-                  .copyWith(labelText: label, errorText: field.errorText),
+              decoration: (decoration ?? const InputDecoration()).copyWith(
+                labelText: label,
+                errorText: field.errorText,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                floatingLabelStyle: const TextStyle(
+                  fontSize: 18,
+                ),
+              ),
               onChanged: (value) {
-                T? v = stringToValue == null ? value as T? : stringToValue(value);
+                T? v =
+                    stringToValue == null ? value as T? : stringToValue(value);
                 field.didChange(v);
                 if (onChanged != null) {
                   onChanged(v);
@@ -75,7 +82,10 @@ class _AppFormFieldState<T> extends FormFieldState<T> {
   TextEditingController? _controller;
 
   TextEditingController get _effectiveController =>
-      (_controller ??= TextEditingController(text: widget.valueToString != null ? widget.valueToString!(widget.initialValue) : '${widget.initialValue}'));
+      (_controller ??= TextEditingController(
+          text: widget.valueToString != null
+              ? widget.valueToString!(widget.initialValue)
+              : '${widget.initialValue}'));
 
   @override
   AppTextFormField<T> get widget => super.widget as AppTextFormField<T>;

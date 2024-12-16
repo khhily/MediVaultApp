@@ -14,19 +14,19 @@ class HistoryPage extends GetView<HistoryPageController> {
         title: const Text('操作记录'),
         centerTitle: true,
       ),
-      body: SmartRefresher(
-        controller: controller.refreshController,
-        physics: const BouncingScrollPhysics(),
-        enablePullUp: true,
-        enablePullDown: true,
-        onRefresh: () async {
-          await controller.refresh();
-        },
-        onLoading: () async {
-          await controller.loadMore();
-        },
-        child: Obx(
-          () => ListView.builder(
+      body: Obx(
+        () => SmartRefresher(
+          controller: controller.refreshController,
+          physics: const BouncingScrollPhysics(),
+          enablePullUp: true,
+          enablePullDown: true,
+          onRefresh: () async {
+            await controller.refresh();
+          },
+          onLoading: () async {
+            await controller.loadMore();
+          },
+          child: ListView.builder(
             itemBuilder: (ctx, index) {
               final item = controller.listService.items[index];
               return Container(
