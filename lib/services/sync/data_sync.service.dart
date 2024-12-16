@@ -9,7 +9,6 @@ import '../global/global_service.dart';
 part 'medication_stock_record.sync.dart';
 
 part 'sync_base.dart';
-part 'sync_interface.dart';
 
 class DataSyncService {
   DataSyncService._();
